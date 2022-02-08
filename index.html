@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dictionary app | HTML - css - JavaScript</title>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        outline: none;
+        border: 0;
+        color: #555;
+        transition: all 0.1s;
+        font-family:"Poppins", serif;
+      }
+      body {
+        height: 100vh;
+        width: 100%;
+        padding:30px 20px;
+        }
+        .container {
+          padding: 30px 20px;
+          background-color: #fff;
+          display: inline-block;
+          border-radius: 3px;
+          margin: auto;
+          width: 100%;
+        }
+        .container #text {
+          width: 100%;
+          height: 50px;
+          padding:0 20px;
+          padding-right: 80px;
+          font-size: 17px;
+          border: 2px solid #dde;
+          border-radius: 5px;
+          
+        }
+        .container #text:focus {
+          border: 2px solid #6B6F94;
+        }
+        .container h2 {
+          text-align: center;
+          margin-bottom: 30px;
+          font-weight: 100;
+        }
+        .container .input_container {
+          position: relative;
+        }
+        .fa-search {
+          font-size: 25px;
+          color: #ddd;
+        }
+       button {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: 20px;
+          background-color: transparent;
+          height: 100%;
+          width: auto;
+        }
+        .fa-times {
+          position: absolute;
+          right: 60px;
+          color: #2D315F;
+          font-size: 20px;
+          top: 50%;
+          opacity: 0;
+          transform: translateY(-50%);
+        }
+        .content {
+          height: 400px;
+          width: 100%;
+          background-color: #fff;
+          margin-top auto;
+          margin-top: 20px;
+          display: none;
+          overflow-y: auto;
+       
+          
+        
+        }
+        .content div {
+          position: relative;
+          padding: 20px 10px;
+          margin: 10px 0;
+          border-bottom: 5px solid #6B6F94;
+          border-radius:10px;
+          box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
+        }
+        .res1 .fa-volume-up {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: 30px;
+       
+        }
+        .content i {
+          font-size: 15px;
+          color: #735835;
+       
+        }
+        
+        .content div h3 {
+          margin: 20px 0;
+          color: #794B10;
+        }
+       
+         span {
+           display: block;
+          inline-size: 100%;
+          overflow-wrap: break-word;
+          line-height: 30px;
+          color: #889;
+         }
+         .center {
+           line-height: 40px;
+           color: #888;
+          inline-size: 100%;
+          overflow-wrap: break-word;
+         }
+         .content div .fa-volume-up {
+           position: absolute;
+           top: 43px;
+           right: 30px;
+         }
+        
+    </style>
+</head>
+<body>
+<div class="container">
+  <form id="form" action="#">
+  <h2>English Dictionary</h2>
+  <div class="input_container">
+     <input required type="text" id="text">
+     <button type="submit">
+     <i id="fa_search" class="fas fa-search"></i>
+     </button>
+     <i id="fa_times" class="fas fa-times"></i>
+  </div><br>
+  <center class="center">
+    Type a word and press enter to get meaning, example, pronunciation, synonyms and antonyms of that word.
+  </center>
+  <div class="content">
+    <div class="res1">
+      <h3></h3>
+      <span></span>
+      <i onclick="playSound()" class="fas fa-volume-up"></i>
+    </div>
+    <div class="res2">
+      <h3>Meaning</h3>
+      <i onclick="Speak_meaning()" class="fas fa-volume-up"></i>
+      <span></span>
+    </div>
+    <div class="origin">
+      <h3>Origin</h3>
+      <i onclick="Speak_origin()" class="fas fa-volume-up"></i>
+      <span></span>
+    </div>
+    <div class="res3">
+      <h3>Example</h3>
+      <i onclick="Speak_example()" class="fas fa-volume-up"></i>
+      <span></span>
+    </div>
+    <div class="res4">
+      <h3>Synonyms</h3>
+      <i onclick="Speak_synonyms()" class="fas fa-volume-up"></i>
+      <span></span>
+    </div>
+    <div class="res5">
+      <h3>Antonyms</h3>
+      <i onclick="Speak_antonyms()" class="fas fa-volume-up"></i>
+      <span></span>
+    </div>
+  </div>
+ </form>
+</div>
+<script>
+  
+  let fa_times = document.querySelector('#fa_times');
+  let fa_search = document.querySelector('#fa_search');
+  let input = document.querySelector('#text');
+  let header = document.querySelector('.res1 h3');
+  header_span = document.querySelector('.res1 span');
+  let span_meaning = document.querySelector('.res2 span');
+  let example_span = document.querySelector('.res3 span');
+  let synonyms_span = document.querySelector('.res4 span');
+  let antonyms_span = document.querySelector('.res5 span');
+  let origin_span = document.querySelector('.origin span');
+  input.oninput = () => {
+    if(input.value.length != 0) {
+      fa_times.style.opacity = 1;
+      fa_search.style.color = '#666';
+    } else {
+      fa_times.style.opacity = 0;
+      fa_search.style.color = '#ddd';
+    }
+  }
+  fa_times.onclick = () => { 
+    input.value = ''; 
+    fa_search.style.color = '#ddd'; 
+    fa_times.style.opacity = 0;
+    
+  };
+  let audio = new Audio(), definition;
+  let origin, example, antonyms;
+ const findWord = () => {
+   if(input.value.length != 0) {
+   fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${input.value}`)
+   .then(response => response.json())
+   .then((res) => {
+   if(res.message != undefined) {
+      alert(`${res.title} \n\n ${res.message}`);
+   }
+  
+     audio.src = res[0].phonetics[0].audio;
+     let word = res[0].word;
+     header.innerHTML = word;
+     let phonetic = res[0].phonetic;
+     origin = res[0].origin;
+     if(origin != undefined) {
+     origin_span.innerHTML = origin;
+     } else {
+       origin_span.innerHTML ='none';
+     }
+     let partOfSpeech = res[0].meanings[0].partOfSpeech;
+     header_span.innerHTML = `${partOfSpeech} / ${phonetic}`;
+    definition = res[0].meanings[0].definitions[0].definition;
+    span_meaning.innerHTML = definition;
+    example = res[0].meanings[0].definitions[0].example;
+    if(example != undefined) {
+      example_span.innerHTML = example;
+    } else {
+      example_span.innerHTML = 'none';
+    }
+    synonyms = res[0].meanings[0].definitions[0].synonyms;
+    if(synonyms.length > 0) {
+      synonyms_span.innerHTML = synonyms.join(', ');
+    } else {
+      synonyms_span.innerHTML = 'none';
+    }
+    antonyms = res[0].meanings[0].definitions[0].antonyms;
+    if(antonyms.length > 0) {
+       antonyms_span.innerHTML = antonyms.join(', ');
+    } else {
+      antonyms_span.innerHTML = 'none';
+    }
+    
+    document.querySelector('.content').style.display ='block';
+    document.querySelector('.center').style.display ='none';
+    
+      })
+    }
+ }
+ 
+ let form = document.getElementById('form');
+  form.onsubmit = (e) => {
+   e.preventDefault();
+   findWord();
+  }
+  fa_search.onclick = () => {
+    findWord();
+  }
+  
+  playSound = () => audio.play();
+  let msg = new SpeechSynthesisUtterance();
+  Speak_meaning = () => {
+    msg.text = 'meaning: ' + definition;
+    window.speechSynthesis.speak(msg);
+  }
+  Speak_origin = () => {
+    if(origin != undefined) {
+      msg.text = 'origin: ' + origin;
+    } else {
+      msg.text = 'origin: none';
+    }
+    
+    window.speechSynthesis.speak(msg);
+  }
+  Speak_example = () => {
+    if(example != undefined) {
+      msg.text = 'Example: ' + example;
+    } else {
+      msg.text = 'example: none';
+    }
+  
+  window.speechSynthesis.speak(msg);
+  }
+  
+  Speak_synonyms = () => {
+  msg.text = 'Synonyms: ' + synonyms_span.innerHTML;
+  window.speechSynthesis.speak(msg);
+  }
+  
+  Speak_antonyms = () => {
+  msg.text = 'antonyms: ' + antonyms_span.innerHTML;
+  window.speechSynthesis.speak(msg);
+  }
+  
+  
+</script>
+</body>
+</html>
